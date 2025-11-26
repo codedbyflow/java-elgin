@@ -1,128 +1,49 @@
-# 🖨️ Sistema de Impressão Elgin
+# Sistema de Impressão Elgin
 
-> **Sistema PDV desenvolvido em Java para controle e comunicação com impressoras de caixa Elgin**
+Sistema em Java para controle de impressoras Elgin usando JNA.
 
----
+## Sobre
 
-## 📋 Sobre o Projeto
+Projeto feito para integrar com impressoras de caixa Elgin. Usa JNA pra chamar as funções da DLL da impressora.
 
-Sistema desenvolvido para facilitar a integração e controle de impressoras de caixa da marca Elgin através de uma interface Java. O projeto utiliza JNA (Java Native Access) para comunicação nativa com a DLL proprietária da impressora, permitindo operações completas de impressão e controle de periféricos.
+## Funcionalidades
 
----
+- Configurar e abrir conexão com a impressora
+- Imprimir texto
+- Imprimir QR Code
+- Imprimir código de barras
+- Imprimir XML SAT e cancelamento
+- Abrir gaveta
+- Sinal sonoro
+- Corte de papel
 
-## ✨ Recursos Disponíveis
+## Como usar
 
-### 🔌 Gerenciamento de Conexão
-- Configuração personalizada de conexão (tipo, modelo, porta, parâmetros)
-- Abertura e fechamento seguro de conexões
-- Validação de estado da conexão
+Execute o programa e escolha uma opção do menu:
 
-### 📄 Impressão de Conteúdo
-- **Texto simples** — Impressão de textos formatados
-- **QR Code** — Geração e impressão de códigos QR
-- **Código de Barras** — Suporte a diversos formatos de código de barras
-- **XML SAT** — Impressão de documentos fiscais (SAT e cancelamentos)
+1 - Configurar Conexao
+2 - Abrir Conexao
+3 - Impressao Texto
+4 - Impressao QRCode
+5 - Impressao Cod Barras
+6 - Impressao XML SAT
+7 - Impressao XML Canc SAT
+8 - Abrir Gaveta Elgin
+9 - Abrir Gaveta
+10 - Sinal Sonoro
+0 - Fechar Conexao e Sair
 
-### 🎛️ Controles de Hardware
-- Corte automático de papel
-- Avanço de papel programável
-- Abertura de gaveta (Elgin e genérica)
-- Emissão de sinais sonoros
+## Requisitos
 
----
+- Java instalado
+- DLL E1_Impressora01.dll na pasta lib
+- JNA (jna-5.15.0.jar)
+- Impressora Elgin conectada
 
-## 🛠️ Stack Tecnológica
+## Observações
 
-| Tecnologia | Descrição |
-|------------|-----------|
-| **Java** | Linguagem principal do projeto |
-| **JNA** | Biblioteca para acesso a funções nativas |
-| **DLL Elgin** | Driver proprietário para controle da impressora |
-| **Console** | Interface de linha de comando |
+Configure a conexão antes de abrir. Todas as operações precisam de conexão ativa. Sempre feche a conexão quando terminar.
 
----
+## Desenvolvedores
 
-## 🚀 Guia de Uso
-
-### Menu Principal
-
-Ao executar o sistema, você terá acesso ao menu interativo com as seguintes opções:
-
-```
-┌─────────────────────────────────────┐
-│   SISTEMA DE IMPRESSÃO ELGIN        │
-├─────────────────────────────────────┤
-│ 1. Configurar conexão               │
-│ 2. Abrir conexão                    │
-│ 3. Imprimir conteúdo                │
-│ 4. Imprimir XML SAT                 │
-│ 5. Controles de hardware            │
-│ 6. Fechar conexão                   │
-│ 0. Sair                             │
-└─────────────────────────────────────┘
-```
-
-### Fluxo de Trabalho Recomendado
-
-1. **Configurar** → Defina os parâmetros de conexão
-2. **Conectar** → Estabeleça comunicação com a impressora
-3. **Imprimir** → Execute as operações desejadas
-4. **Desconectar** → Encerre a conexão adequadamente
-
----
-
-## 🔧 API Principal
-
-### Interface `ImpressoraDLL`
-
-A interface principal mapeia os métodos nativos da DLL para uso em Java:
-
-#### Métodos de Conexão
-- `AbreConexaoImpressora(...)` — Inicia conexão com a impressora
-- `FechaConexaoImpressora()` — Encerra a conexão
-
-#### Métodos de Impressão
-- `ImpressaoTexto(...)` — Envia texto para impressão
-- `ImpressaoQRCode(...)` — Gera e imprime QR Code
-- `ImpressaoCodigoBarras(...)` — Imprime código de barras
-- `ImprimeXMLSAT(...)` — Processa XML SAT
-- `ImprimeXMLCancelamentoSAT(...)` — Processa cancelamento SAT
-
-#### Métodos de Controle
-- `AvancaPapel(...)` — Avança papel na impressora
-- `Corte(...)` — Executa corte de papel
-- `AbreGavetaElgin()` / `AbreGaveta(...)` — Controla gaveta de dinheiro
-- `SinalSonoro(...)` — Emite alertas sonoros
-
----
-
-## ⚠️ Requisitos e Observações
-
-### Pré-requisitos
-- Java Runtime Environment (JRE) instalado
-- DLL da impressora Elgin disponível no sistema
-- Impressora Elgin conectada e configurada
-
-### Importante
-- ⚠️ Configure a conexão antes de tentar abrir
-- ⚠️ Todas as operações de impressão requerem conexão ativa
-- ⚠️ Mensagens de erro são exibidas no console para diagnóstico
-- ⚠️ Sempre feche a conexão ao finalizar o uso
-
----
-
-## 👥 Equipe de Desenvolvimento
-
-Desenvolvido com dedicação por:
-- Kaio
-- Felipe
-- Igor
-- Mauricio
-- Fernando
-
----
-
-## 📝 Licença
-
-Este projeto é fornecido como está, para uso em sistemas PDV.
-
+Kaio, Felipe, Igor, Mauricio, Fernando
