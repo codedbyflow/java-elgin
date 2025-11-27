@@ -1,37 +1,48 @@
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+
 import java.util.Scanner;
 import java.nio.file.*;
 
 public class Main {
 
+
     public interface ImpressoraDLL extends Library {
 
         ImpressoraDLL INSTANCE = (ImpressoraDLL) Native.load(
-                Paths.get(System.getProperty("user.dir"), "lib", "E1_Impressora01.dll").toString(), ImpressoraDLL.class);
+                Paths.get(System.getProperty("user.dir"), "lib", "E1_Impressora01.dll").toString(), ImpressoraDLL.class); // Adicione o Caminho completo para a DLL
 
         int AbreConexaoImpressora(int tipo, String modelo, String conexao, int parametro);
 
         int FechaConexaoImpressora();
 
+        // Impressão de texto: String, int, int, int
         int ImpressaoTexto(String dados, int posicao, int estilo, int tamanho);
 
+        // Corte: int
         int Corte(int avanco);
 
+        // Impressão de QR Code: String, int, int
         int ImpressaoQRCode(String dados, int tamanho, int nivelCorrecao);
 
+        // Impressão de código de barras: int, String, int, int, int
         int ImpressaoCodigoBarras(int tipo, String dados, int altura, int largura, int HRI);
 
+        // Avançar papel: int
         int AvancaPapel(int linhas);
 
         int AbreGavetaElgin(int pino, int ti, int tf);
 
+        // Abre gaveta: int, int, int
         int AbreGaveta(int pino, int ti, int tf);
 
+        // Sinal sonoro: int, int, int
         int SinalSonoro(int qtd, int tempoInicio, int tempoFim);
 
+        // Imprime XML SAT: String, int
         int ImprimeXMLSAT(String dados, int param);
 
+        // Imprime XML Cancelamento SAT: String, String, int
         int ImprimeXMLCancelamentoSAT(String dados, String assQRCode, int param);
 
     }
@@ -41,36 +52,41 @@ public class Main {
     private static String modelo;
     private static String conexao;
     private static int parametro;
-    private static final Scanner input = new Scanner(System.in);
+    private static final Scanner input = new Scanner(System.in); // Scanner estÃ¡tico e final
+
 
     private static String capturarEntrada(String mensagem) {
         System.out.print(mensagem);
         return input.nextLine();
     }
 
+
+
     public static void configurarConexao() {
         if (!conexaoAberta) {
             System.out.println("Digite o tipo de conexao (1 para USB, 2 para Serial, etc.): ");
-            tipo = input.nextInt();
-            input.nextLine();
+            tipo = input.nextInt(); // Lê o tipo de conexão como inteiro
+            input.nextLine(); // Consumir quebra de linha restante
 
             System.out.println("Digite o modelo da impressora: ");
-            modelo = input.nextLine();
+            modelo = input.nextLine(); // Lê o modelo da impressora
 
             System.out.println("Digite a porta de conexão (ex: USB): ");
-            conexao = input.nextLine();
+            conexao = input.nextLine(); // Lê a porta de conexão
 
             System.out.println("Digite o parâmetro adicional (ex: 0 para padrão): ");
             parametro = input.nextInt();
-            input.nextLine();
+            input.nextLine(); // Consumir quebra de linha restante
 
             System.out.println("Parâmetros de conexão configurados com sucesso.");
         } else {
             System.out.println("Conexão já configurada. Pronta para uso.");
         }
+
     }
 
     public static void abrirConexao() {
+        // Função para abrir a conexão com a impressora
         if (!conexaoAberta) {
             int retorno = ImpressoraDLL.INSTANCE.AbreConexaoImpressora(tipo, modelo, conexao, parametro);
             if (retorno == 0) {
@@ -92,6 +108,7 @@ public class Main {
         } else {
             System.out.println("Nenhuma conexão aberta para fechar.");
         }
+
     }
 
 
@@ -122,12 +139,14 @@ public class Main {
             System.out.println(ret);
         } else {
             System.out.println("Erro: Conexão não está aberta.");
+
         }
     }
 
 
     public static void ImpressaoQRCode(String dados, int tamanho, int nivelCorrecao) {
-        if (conexaoAberta) {
+
+        if (conexaoAberta == true) {
             int retorno = ImpressoraDLL.INSTANCE.ImpressaoQRCode("Teste de impressao", 6, 4);
             ImpressoraDLL.INSTANCE.AvancaPapel(2);
             ImpressoraDLL.INSTANCE.Corte(2);
@@ -148,6 +167,7 @@ public class Main {
     }
 
     public static void ImprimeXMLSAT(String dados, int parametro) {
+
         if (conexaoAberta) {
             int retorno = ImpressoraDLL.INSTANCE.ImprimeXMLSAT("\n" +
                     "<CFe>\n" +
@@ -287,12 +307,18 @@ public class Main {
             ImpressoraDLL.INSTANCE.AvancaPapel(2);
             ImpressoraDLL.INSTANCE.Corte(2);
         } else {
+
             System.out.println("Erro: Conexão não está aberta.");
         }
     }
 
+
     public static void ImprimeXMLCancelamentoSAT(String dados, String assQRCode, int param) {
+
+
         if (conexaoAberta) {
+
+            //String dadosXML = new String(Files.readAllBytes(Paths.get("C:/Users/kaio/Downloads/Material de apoio/Exemplo Java/CANC_SAT.xml")));
             assQRCode = "Q5DLkpdRijIRGY6YSSNsTWK1TztHL1vD0V1Jc4spo/CEUqICEb9SFy82ym8EhBRZjbh3btsZhF+sjHqEMR159i4agru9x6KsepK/q0E2e5xlU5cv3m1woYfgHyOkWDNcSdMsS6bBh2Bpq6s89yJ9Q6qh/J8YHi306ce9Tqb/drKvN2XdE5noRSS32TAWuaQEVd7u+TrvXlOQsE3fHR1D5f1saUwQLPSdIv01NF6Ny7jZwjCwv1uNDgGZONJdlTJ6p0ccqnZvuE70aHOI09elpjEO6Cd+orI7XHHrFCwhFhAcbalc+ZfO5b/+vkyAHS6CYVFCDtYR9Hi5qgdk31v23w==";
 
             int retorno = ImpressoraDLL.INSTANCE.ImprimeXMLCancelamentoSAT("<CFeCanc>\n" +
@@ -367,9 +393,11 @@ public class Main {
                 System.out.println("Erro ao imprimir o Cancelamento SAT. Código de erro: " + retorno);
             }
 
+
             ImpressoraDLL.INSTANCE.AvancaPapel(2);
             ImpressoraDLL.INSTANCE.Corte(2);
         } else {
+
             System.out.println("Erro: Conexão não está aberta.");
         }
     }
@@ -384,29 +412,35 @@ public class Main {
         }
     }
 
-    public static void AbreGaveta() {
-        if (conexaoAberta) {
-            int retorno = ImpressoraDLL.INSTANCE.AbreGaveta(1, 5, 10);
-            if (retorno == 0) {
-                System.out.println("Gaveta aberta com sucesso!");
-            } else {
-                System.out.println("Erro ao abrir gaveta. Código: " + retorno);
-            }
-        } else {
-            System.out.println("Erro: Conexão não está aberta.");
-        }
-    }
-
     public static void AbreGavetaElgin() {
         if (conexaoAberta) {
-            int retorno = ImpressoraDLL.INSTANCE.AbreGavetaElgin(1, 50, 50);
-            if (retorno == 0) {
-                System.out.println("Gaveta Elgin aberta com sucesso!");
+            int resultadao = ImpressoraDLL.INSTANCE.AbreGavetaElgin(1, 50, 50);
+
+            if (resultadao == 0) {
+                System.out.printf("Gaveta aberta com sucesso");
             } else {
-                System.out.println("Erro ao abrir gaveta Elgin. Código: " + retorno);
+                System.out.printf("Erro ao abrir a gaveta! Erro: " + resultadao);
             }
         } else {
-            System.out.println("Erro: Conexão não está aberta.");
+            System.out.printf("Conexão não iniciada");
+            return;
+        }
+
+    }
+
+    public static void AbreGaveta() {
+        if (conexaoAberta) {
+
+            int resultado = ImpressoraDLL.INSTANCE.AbreGaveta(1, 5, 10);
+
+            if (resultado == 0) {
+                System.out.printf("Gaveta aberta com sucesso");
+            } else {
+                System.out.printf("Erro ao abrir a gaveta! Erro: " + resultado);
+            }
+        } else {
+            System.out.printf("Conexão não iniciada!");
+            return;
         }
     }
 
@@ -420,8 +454,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws java.io.IOException {
+
         while (true) {
             exibirMenuOpcoes();
+
             String escolha = capturarEntrada("\nDigite a opção desejada: ");
 
             switch (escolha) {
@@ -460,16 +496,15 @@ public class Main {
                     String xmlCancelamento = "path=C:/Users/kaio/Downloads/Material de apoio/Exemplo Java/CANC_SAT.xml";
                     String assinaturaQRCode = "Q5DLkpdRijIRGY6YSSNsTWK1TztHL1vD0V1Jc4spo/CEUqICEb9SFy82ym8EhBRZjbh3btsZhF+sjHqEMR159i4agru9x6KsepK/q0E2e5xlU5cv3m1woYfgHyOkWDNcSdMsS6bBh2Bpq6s89yJ9Q6qh/J8YHi306ce9Tqb/drKvN2XdE5noRSS32TAWuaQEVd7u+TrvXlOQsE3fHR1D5f1saUwQLPSdIv01NF6Ny7jZwjCwv1uNDgGZONJdlTJ6p0ccqnZvuE70aHOI09elpjEO6Cd+orI7XHHrFCwhFhAcbalc+ZfO5b/+vkyAHS6CYVFCDtYR9Hi5qgdk31v23w==";
                     int param = 0;
+
                     ImprimeXMLCancelamentoSAT(xmlCancelamento, assinaturaQRCode, param);
                     break;
 
                 case "8":
-                    System.out.println("Abrir Gaveta Elgin ....");
                     AbreGavetaElgin();
                     break;
 
                 case "9":
-                    System.out.println("Abrir Gaveta");
                     AbreGaveta();
                     break;
 
@@ -483,7 +518,10 @@ public class Main {
                     fecharConexao();
                     System.exit(0);
                     break;
+
             }
         }
+
     }
+
 }
